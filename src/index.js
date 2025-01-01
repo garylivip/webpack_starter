@@ -5,5 +5,15 @@ import laughing from "./assets/laughing.svg";
 const laughImg = document.getElementById("laughImg");
 laughImg.src = laughing;
 
-console.log(generateJoke());
+const joke = document.getElementById("joke");
+document.addEventListener("DOMContentLoaded", async () => {
+    joke.innerHTML = "Loading...";
+    joke.innerHTML = await generateJoke();
+});
+
+jokeBtn.addEventListener("click", async () => { 
+    joke.innerHTML = "Loading...";
+    joke.innerHTML = await generateJoke();
+});
+
 console.log(process.env.NODE_ENV);
