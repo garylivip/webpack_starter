@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { title } = require('process');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     mode: 'production', // 'production' or 'development'
@@ -62,6 +62,7 @@ module.exports = {
             title: 'Webpack 5 Starter',
             filename: 'index.html',
             template: path.resolve(__dirname, 'src', 'template.html'),
-        })
+        }),
+        new BundleAnalyzerPlugin()
     ]
 };
