@@ -44,24 +44,42 @@ function cloneOrUpdateRepo() {
 
 // 安装依赖
 function installDependencies() {
-  console.log("Installing dependencies...");
-  const npmInstall = exec(`cd ${projectDir} && npm install`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error installing dependencies: ${error}`);
+  const packageJsonPath = path.join(projectDir, "package.json");
+
+  // 读取 package.json 文件
+  fs.readFile(packageJsonPath, "utf8", (err, data) => {
+    if (err) {
+      console.error(`Error reading package.json: ${err}`);
       return;
     }
-    console.log(stdout);
-    console.log("Dependencies installed successfully.");
+
+    const packageJson = JSON.parse(data);
+    const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
+
+    // 安装每个依赖包
+    Object.keys(dependencies).forEach((pkg) => {
+      console.log(`Installing ${pkg}...`);
+      const npmInstall = exec(`cd ${projectDir} && npm install ${pkg}`, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error installing ${pkg}: ${error}`);
+          return;
+        }
+        console.log(stdout);
+        console.log(`${pkg} installed successfully.`);
+      });
+
+      // 输出安装进度信息
+      npmInstall.stdout.on("data", (data) => {
+        process.stdout.write(data);
+      });
+
+      npmInstall.stderr.on("data", (data) => {
+        process.stderr.write(data);
+      });
+    });
+
+    console.log("All dependencies installed successfully.");
     buildProject();
-  });
-
-  // 输出 npm install 的进度信息
-  npmInstall.stdout.on("data", (data) => {
-    process.stdout.write(data);
-  });
-
-  npmInstall.stderr.on("data", (data) => {
-    process.stderr.write(data);
   });
 }
 

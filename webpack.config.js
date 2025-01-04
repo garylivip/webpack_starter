@@ -63,6 +63,6 @@ module.exports = {
             filename: 'index.html',
             template: path.resolve(__dirname, 'src', 'template.html'),
         }),
-        new BundleAnalyzerPlugin()
+        // new BundleAnalyzerPlugin()
     ]
 };
