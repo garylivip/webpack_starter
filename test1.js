@@ -1,4 +1,4 @@
-// Sample JavaScript code
+// Sample JavaScript code for basic arithmetic operations
 
 // Function to add two numbers
 function add(a, b) {
