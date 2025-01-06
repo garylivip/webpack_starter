@@ -1,0 +1,42 @@
+name: NodeJS with Webpack Deploy to Aliyun ECS
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        npm install
+        # npx webpack
+        
+    - name: Deploy to Aliyun ECS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SERVER_SSH_KEY }}
+        script: |
+          # Ensure the directory exists
+          mkdir -p /home/garyli/git_action_webpack_starter
+          # Transfer the built files
+          rsync -avz --exclude='.git' --exclude='node_modules' --exclude='.github' . /home/garyli/git_action_webpack_starter
+          # Restart the application
+          # systemctl restart your-application.service
