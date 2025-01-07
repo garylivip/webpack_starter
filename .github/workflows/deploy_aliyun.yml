@@ -2,9 +2,9 @@ name: NodeJS with Webpack Deploy to Aliyun ECS
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -15,28 +15,58 @@ jobs:
         node-version: [18.19.1]
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Build
-      run: |
-        npm install
-        # npx webpack
-        
-    - name: Deploy to Aliyun ECS
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.ALIYUN_HOST }}
-        username: ${{ secrets.ALIYUN_USERNAME }}
-        key: ${{ secrets.ALIYUN_SERVER_SSH_KEY }}
-        script: |
-          # Ensure the directory exists
-          mkdir -p /home/garyli/git_action_webpack_starter
-          # Transfer the built files
-          rsync -avz --exclude='.git' --exclude='node_modules' --exclude='.github' . /home/garyli/git_action_webpack_starter
-          # Restart the application
-          # systemctl restart your-application.service
+      - name: Build
+        run: |
+          npm install
+          npx webpack
+
+      - name: Deploy to Aliyun ECS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ALIYUN_HOST }}
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          key: ${{ secrets.ALIYUN_SERVER_SSH_KEY }}
+          script: |
+            #!/bin/bash
+
+            # 设置脚本执行失败时退出
+            set -e
+
+            # 定义日志文件路径
+            LOG_FILE="/home/garyli/git_action_webpack_starter/deploy_log.txt"
+
+            # 定义记录日志的函数
+            log() {
+              local timestamp
+              timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+              echo "[$timestamp] $1" | tee -a "$LOG_FILE"
+            }
+
+            # 传输构建文件
+            log "Transferring the built files..."
+            if [ -d "/home/garyli/git_action_webpack_starter" ]; then              
+              # no action
+            else
+              mkdir -p /home/garyli/git_action_webpack_starter
+            fi
+            cd /home/garyli/git_action_webpack_starter
+            rsync -avz --exclude='.git' --exclude='node_modules' --exclude='.github' --exclude='**/node_modules' . .
+            log "Files transferred successfully."
+
+            # 重启应用服务
+            # log "Restarting the application..."
+            # systemctl restart your-application.service
+            # log "Application restarted successfully."
+
+            # 记录脚本执行完成的日志
+            log "Deploy script completed."
+
+           
+         
