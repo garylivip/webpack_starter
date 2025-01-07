@@ -57,25 +57,25 @@ jobs:
           mkdir -p /home/garyli/git_action_webpack_starter
 
           # 同步仓库
-          log "Cloning or updating the repository..."
-          if [ -d "/home/garyli/git_action_webpack_starter/webpack_starter" ]; then
-            cd /home/garyli/git_action_webpack_starter/webpack_starter
-            git pull origin main
-          else
-            git clone https://github.com/garylivip/webpack_starter.git /home/garyli/git_action_webpack_starter/webpack_starter
-            cd /home/garyli/git_action_webpack_starter/webpack_starter
-          fi
-          log "Repository cloned or updated successfully."
+          # log "Cloning or updating the repository..."
+          # if [ -d "/home/garyli/git_action_webpack_starter/webpack_starter" ]; then
+          #   cd /home/garyli/git_action_webpack_starter/webpack_starter
+          #   git pull origin main
+          # else
+          #   git clone https://github.com/garylivip/webpack_starter.git /home/garyli/git_action_webpack_starter/webpack_starter
+          #   cd /home/garyli/git_action_webpack_starter/webpack_starter
+          # fi
+          # log "Repository cloned or updated successfully."
 
           # 安装依赖包
-          log "Installing dependencies..."
-          npm install
-          log "Dependencies installed successfully."
+          # log "Installing dependencies..."
+          # npm install
+          # log "Dependencies installed successfully."
 
           # 构建项目
-          log "Building the project..."
-          npm run build
-          log "Project built successfully."
+          # log "Building the project..."
+          # npm run build
+          # log "Project built successfully."
 
           # 传输构建文件
           log "Transferring the built files..."
