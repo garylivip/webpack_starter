@@ -39,6 +39,12 @@ jobs:
             # 设置脚本执行失败时退出
             set -e
 
+            # 创建存放项目文件的目录
+            mkdir -p /home/garyli/git_action_webpack_starter
+
+            # 进入项目目录
+            cd /home/garyli/git_action_webpack_starter
+
             # 定义日志文件路径
             LOG_FILE="/home/garyli/git_action_webpack_starter/deploy_log.txt"
 
@@ -50,13 +56,7 @@ jobs:
             }
 
             # 传输构建文件
-            log "Transferring the built files..."
-            if [ -d "/home/garyli/git_action_webpack_starter" ]; then              
-              # no action
-            else
-              mkdir -p /home/garyli/git_action_webpack_starter
-            fi
-            cd /home/garyli/git_action_webpack_starter
+            log "Transferring the built files..."            
             rsync -avz --exclude='.git' --exclude='node_modules' --exclude='.github' --exclude='**/node_modules' . .
             log "Files transferred successfully."
 
