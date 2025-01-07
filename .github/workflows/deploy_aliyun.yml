@@ -39,6 +39,11 @@ jobs:
           # 设置脚本执行失败时退出
           set -e
 
+          # 确保目标目录存在
+          # log "Ensuring the target directory exists..."
+          mkdir -p /home/garyli/git_action_webpack_starter
+          cd /home/garyli/git_action_webpack_starter
+
           # 定义日志文件路径
           LOG_FILE="/home/garyli/git_action_webpack_starter/deploy_log.txt"
 
@@ -52,9 +57,7 @@ jobs:
           # 记录脚本开始执行的日志
           log "Deploy script started."
 
-          # 确保目标目录存在
-          log "Ensuring the target directory exists..."
-          mkdir -p /home/garyli/git_action_webpack_starter
+
 
           # 同步仓库
           # log "Cloning or updating the repository..."
