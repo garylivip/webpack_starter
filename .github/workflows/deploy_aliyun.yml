@@ -83,9 +83,9 @@ jobs:
           log "Files transferred successfully."
 
           # 重启应用服务
-          log "Restarting the application..."
-          systemctl restart your-application.service
-          log "Application restarted successfully."
+          # log "Restarting the application..."
+          # systemctl restart your-application.service
+          # log "Application restarted successfully."
 
           # 记录脚本执行完成的日志
           log "Deploy script completed."
